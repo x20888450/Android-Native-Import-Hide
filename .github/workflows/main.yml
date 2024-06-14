@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-project:
+    name: Build project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: CMake build for ARM
+        run: cmake -B build --preset android-armeabi-v7a
+
+      - name: Build with make
+        run: make -C build -j2
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/lib*
+          retention-days: 3
